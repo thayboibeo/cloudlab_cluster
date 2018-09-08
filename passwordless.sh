@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 ##
 ## This script creates an SSH keypair for a given user on a node in a
 ## Cloudlab experiment, and adds it to that user's SSH authorized_keys
@@ -79,7 +81,6 @@ mv ${PUBKEY}.tmp $PUBKEY
 touch $SSHDIR/authorized_keys
 cat $PUBKEY >> $SSHDIR/authorized_keys
 chmod 600 $SSHDIR/authorized_keys
-chown lngo:lngo $PRIVKEY
-chown lngo:lngo $PUBKEY
+chown -R $USER:$USER $SSHDIR
 
 exit 0
