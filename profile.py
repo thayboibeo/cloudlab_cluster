@@ -8,14 +8,22 @@ pc = portal.Context()
 
 # Create a Request object to start building the RSpec.
 request = pc.makeRequestRSpec()
- 
-# Add a raw PC to the request.
-node = request.XenVM("node")
-node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:CENTOS7-64-STD"
-node.routable_control_ip = "true"
+link = request.LAN("lan")
 
-# Install and execute a script that is contained in the repository.
-node.addService(pg.Execute(shell="sh", command="/local/repository/silly.sh"))
+for i in range(6):
+  node = request.XenVM("node" + str(i))
+  node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:CENTOS7-64-STD"
+  
+  iface = node.addInterface("if" + str(i))
+  iface.component_id = "eth1"
+  iface.addAddress(rspec.IPv4Address("192.168.1." + str(i + 1), "255.255.255.0"))
+  link.addInterface(iface)
+  
+  if i == 0:
+    node.routable_control_ip = "true"
+  
+  # Install and execute a script that is contained in the repository.
+  #node.addService(pg.Execute(shell="sh", command="/local/repository/silly.sh"))
 
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request)
