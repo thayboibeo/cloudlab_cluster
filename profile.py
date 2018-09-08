@@ -9,6 +9,19 @@ pc = portal.Context()
 
 # Create a Request object to start building the RSpec.
 request = pc.makeRequestRSpec()
+
+
+tourDescription = "This profile provides a full research cluster with \
+  head node, scheduler, compute nodes, and shared file systems."
+
+#
+# Setup the Tour info with the above description and instructions.
+#  
+tour = IG.Tour()
+tour.Description(IG.Tour.TEXT,tourDescription)
+request.addTour(tour)
+
+
 link = request.LAN("lan")
 
 for i in range(6):
