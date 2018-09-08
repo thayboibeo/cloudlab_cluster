@@ -79,5 +79,7 @@ mv ${PUBKEY}.tmp $PUBKEY
 touch $SSHDIR/authorized_keys
 cat $PUBKEY >> $SSHDIR/authorized_keys
 chmod 600 $SSHDIR/authorized_keys
+chown lngo:lngo $PRIVKEY
+chown lngo:lngo $PUBKEY
 
 exit 0
