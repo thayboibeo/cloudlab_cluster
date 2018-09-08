@@ -17,8 +17,8 @@ set -x
 # A simple configuration for the root user.  Change USER, HOMEDIR, and
 # KEYNAME as desired.
 #
-USER=lngo
-HOMEDIR=/users/lngo
+USER=root
+HOMEDIR=/root
 KEYNAME=id_rsa
 
 #
@@ -81,6 +81,13 @@ mv ${PUBKEY}.tmp $PUBKEY
 touch $SSHDIR/authorized_keys
 cat $PUBKEY >> $SSHDIR/authorized_keys
 chmod 600 $SSHDIR/authorized_keys
-chown -R $USER:$USER $SSHDIR
 
+
+CUSTOM_USER=lngo
+CUSTOM_SSHDIR=/users/lngo/.ssh
+CUSTOM_GROUP=`id -gn ${CUSTOM_USER}`
+
+cp $PRIVKEY ${CUSTOM_SSHDIR}
+cp $PUBKEY ${CUSTOM_SSHDIR}
+chown -R ${CUSTOM_USER}:${CUSTOM_GROUP} ${CUSTOM_SSHDIR}
 exit 0
