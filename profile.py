@@ -11,8 +11,26 @@ pc = portal.Context()
 request = pc.makeRequestRSpec()
 
 
-tourDescription = "This profile provides a full research cluster with \
-  head node, scheduler, compute nodes, and shared file systems."
+tourDescription = \
+"""
+This profile provides a full research cluster with head node, scheduler, compute nodes, and shared file systems.
+
+First node (head): 
+- Shared home directory
+- Shared software directory (/software)
+- Management server for BeeGFS
+- Management server for SLURM
+
+Second node (metadata):
+- Metadata server for BeeGFS
+- Metadata server for SLURM
+
+Third node (storage):
+- Storage server
+
+Remaining three nodes (computing):
+- Compute nodes  
+"""
 
 #
 # Setup the Tour info with the above description and instructions.
@@ -25,7 +43,18 @@ request.addTour(tour)
 link = request.LAN("lan")
 
 for i in range(6):
-  node = request.XenVM("node" + str(i))
+  if i == 0:
+    node = request.XenVM("head")
+    node.routable_control_ip = "true"
+  elif i == 1:
+    node = request.XenVM("metadata")
+  elif i == 2:
+    node = request.XenVM("storage")
+  else:
+    node = request.XenVM("compute-" + str(i))
+    node.cores = 2
+    node.ram = 4096
+    
   node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:CENTOS7-64-STD"
   
   iface = node.addInterface("if" + str(i))
@@ -33,10 +62,6 @@ for i in range(6):
   iface.addAddress(pg.IPv4Address("192.168.1." + str(i + 1), "255.255.255.0"))
   link.addInterface(iface)
   
-  if i == 0:
-    node.routable_control_ip = "true"
-  
-  # Install and execute a script that is contained in the repository.
   #node.addService(pg.Execute(shell="sh", command="/local/repository/silly.sh"))
 
 # Print the RSpec to the enclosing page.
