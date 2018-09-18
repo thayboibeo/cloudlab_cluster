@@ -64,13 +64,11 @@ for i in range(6):
   
   node.addService(pg.Execute(shell="sh", command="sudo chmod 755 /local/repository/passwordless.sh"))
   node.addService(pg.Execute(shell="sh", command="sudo /local/repository/passwordless.sh"))
-  
-  node.addService(pg.Execute(shell="sh", command="sudo chmod 755 /local/repository/install_mpi.sh"))
-  node.addService(pg.Execute(shell="sh", command="sudo /local/repository/install_mpi.sh"))
-  
+    
   if i == 0:
+    node.addService(pg.Execute(shell="sh", command="sudo chmod 755 /local/repository/install_mpi.sh"))
+    node.addService(pg.Execute(shell="sh", command="sudo /local/repository/install_mpi.sh"))
     node.addService(pg.Execute(shell="sh", command="cp /local/repository/source/* /users/lngo"))
   
-
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request)
