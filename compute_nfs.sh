@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# still issue with ownership after mapping
 sudo mkdir -p /mnt/nfs/home
 sudo mount -t nfs 192.168.1.1:/home /mnt/nfs/home/
 
